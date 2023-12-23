@@ -10,10 +10,8 @@ backend/pnpm-debug.log*
 backend/yarn-debug.log*
 backend/yarn-error.log*
 backend/lerna-debug.log*
-
 backend/# OS
 backend/.DS_Store
-backend/
 backend/# Tests
 backend/coverage
 backend/.nyc_output
