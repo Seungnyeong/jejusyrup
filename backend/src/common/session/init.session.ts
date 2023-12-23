@@ -18,7 +18,7 @@ export function setUpSession(app: INestApplication): void {
   const redisClient = createClient({
     url: `redis://${host}:${port}`,
   });
-
+  // 레디스 설정
   const redisStore = new RedisStore(session);
 
   app.use(
