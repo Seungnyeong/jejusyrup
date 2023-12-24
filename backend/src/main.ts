@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as csurf from 'csurf';
+import * as cookieParser from 'cookie-parser';
 import { setUpSession } from 'src/common/session/init.session';
 
 async function bootstrap() {
@@ -9,6 +10,7 @@ async function bootstrap() {
     cors: true,
   });
   app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(cookieParser());
   setUpSession(app);
   // app.use(csurf());
   await app.listen(3001);

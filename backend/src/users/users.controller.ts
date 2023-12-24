@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Session,
+  Res,
+  Req,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
+import { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -12,8 +24,24 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Get('/profile')
+  profile(@Req() request) {
+    return this.usersService.findById(request.user);
+  }
+
   @Post('/login')
-  userLogin(@Body() loginUserDto: LoginUserDto) {
-    return this.usersService.login(loginUserDto);
+  @UseGuards(LocalAuthGuard)
+  userLogin(
+    @Req() loginUserDto: LoginUserDto,
+    @Session() session,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    response
+      .cookie('session_id', session.id, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+      })
+      .send({ status: 'ok' });
   }
 }

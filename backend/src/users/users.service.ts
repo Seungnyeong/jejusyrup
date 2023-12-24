@@ -38,7 +38,7 @@ export class UsersService {
     }
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<Response> {
+  async validate(loginUserDto: LoginUserDto): Promise<Response> {
     try {
       const user = await this.users.findOne({
         where: { email: loginUserDto.email },
@@ -47,11 +47,10 @@ export class UsersService {
         throw new UserNotExistException();
       }
       const isCorrect = await user.checkPassword(loginUserDto.password);
-      console.log(isCorrect);
       if (isCorrect) {
         return {
           success: true,
-          message: 'Login Success',
+          data: user,
         };
       }
       throw new PasswordUnValidateException();
@@ -70,10 +69,22 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  findOne(email: string): Promise<User | undefined> {
-    return this.users.findOneOrFail({
+  async findOne(email: string): Promise<Response> {
+    const user = this.users.findOneOrFail({
       where: {
         email: email,
+      },
+    });
+    return {
+      success: true,
+      data: user,
+    };
+  }
+
+  findById(id: number): Promise<User | undefined> {
+    return this.users.findOneOrFail({
+      where: {
+        id: id,
       },
     });
   }
