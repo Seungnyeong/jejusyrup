@@ -14,6 +14,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { Response } from 'express';
+import { User } from 'src/decorators/user.decorator';
+import { Role } from 'src/decorators/role.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -25,8 +27,8 @@ export class UsersController {
   }
 
   @Get('/profile')
-  profile(@Req() request) {
-    return this.usersService.findById(request.user);
+  profile(@User() user) {
+    return this.usersService.findById(user.id);
   }
 
   @Post('/login')

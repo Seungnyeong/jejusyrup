@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -14,6 +19,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { RedisModule } from './redis/redis.module';
+import { BlogModule } from './blog/blog.module';
+import { Blog } from 'src/blog/entities/blog.entity';
 
 @Module({
   imports: [
@@ -51,7 +58,7 @@ import { RedisModule } from './redis/redis.module';
       logging:
         process.env.NODE_ENV !== 'production' &&
         process.env.NODE_ENV !== 'test',
-      entities: [User, Media],
+      entities: [User, Blog, Media],
     }),
     UsersModule,
     CommonModule,
@@ -59,6 +66,7 @@ import { RedisModule } from './redis/redis.module';
     MailModule,
     MediaModule,
     RedisModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -66,6 +74,21 @@ import { RedisModule } from './redis/redis.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
-    consumer.apply(AuthMiddleware).exclude('users/login').forRoutes('*');
+    consumer
+      .apply(AuthMiddleware)
+      .exclude(
+        {
+          path: '/users/login',
+          method: RequestMethod.POST,
+        },
+        {
+          path: '/users',
+          method: RequestMethod.POST,
+        },
+      )
+      .forRoutes({
+        path: '*',
+        method: RequestMethod.ALL,
+      });
   }
 }

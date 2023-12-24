@@ -40,9 +40,12 @@ export class UsersService {
 
   async validate(loginUserDto: LoginUserDto): Promise<Response> {
     try {
-      const user = await this.users.findOne({
-        where: { email: loginUserDto.email },
-      });
+      const user = await this.users
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .where('user.email = :email', { email: loginUserDto.email })
+        .getOneOrFail();
+
       if (!user) {
         throw new UserNotExistException();
       }
@@ -82,6 +85,7 @@ export class UsersService {
   }
 
   findById(id: number): Promise<User | undefined> {
+    console.log('asdf');
     return this.users.findOneOrFail({
       where: {
         id: id,

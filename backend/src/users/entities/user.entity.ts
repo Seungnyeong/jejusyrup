@@ -4,9 +4,10 @@ import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Media } from 'src/media/entities/media.entity';
+import { Blog } from 'src/blog/entities/blog.entity';
 export enum UserRole {
   Admin = 'Admin',
-  Photographer = 'Photograper',
+  Photographer = 'Photographer',
 }
 
 @Entity()
@@ -14,7 +15,7 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({ unique: true })
@@ -27,9 +28,12 @@ export class User extends CoreEntity {
   @OneToMany(() => Media, (media) => media.id)
   medias: Media[];
 
+  @OneToMany(() => Blog, (blog) => blog.id)
+  blogs: Blog[];
+
   @BeforeInsert()
   @BeforeUpdate()
-  async hasPassword(): Promise<void> {
+  async hashPassword(): Promise<void> {
     if (this.password) {
       try {
         this.password = await bcrypt.hash(this.password, 10);

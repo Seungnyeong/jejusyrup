@@ -17,7 +17,7 @@ export class AuthMiddleware implements NestMiddleware {
       const {
         passport: { user },
       } = JSON.parse(sessionKey);
-      req['user'] = Number(user);
+      req['user'] = user;
       next();
     } else {
       throw new UnauthorizedException();

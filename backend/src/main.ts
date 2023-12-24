@@ -9,6 +9,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
+  app.setGlobalPrefix('api', {
+    exclude: [],
+  });
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(cookieParser());
   setUpSession(app);

@@ -1,3 +1,4 @@
+import { Blog } from 'src/blog/entities/blog.entity';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
@@ -20,4 +21,7 @@ export class Media extends CoreEntity {
 
   @ManyToOne((type) => User, (user) => user.medias)
   user: User;
+
+  @ManyToOne((type) => Blog, (blog) => blog.id)
+  blog: Blog;
 }
