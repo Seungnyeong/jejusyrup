@@ -15,7 +15,6 @@ import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { Response } from 'express';
 import { User } from 'src/decorators/user.decorator';
-import { Role } from 'src/decorators/role.decorator';
 
 @Controller('users')
 export class UsersController {

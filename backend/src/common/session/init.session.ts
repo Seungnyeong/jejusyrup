@@ -27,7 +27,7 @@ export function setUpSession(app: INestApplication): void {
       cookie: {
         httpOnly: true,
         secure: true,
-        maxAge: 30000,
+        maxAge: 10 * 60 * 1000,
       },
     }),
   );

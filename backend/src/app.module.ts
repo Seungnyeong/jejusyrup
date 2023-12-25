@@ -59,6 +59,7 @@ import { Blog } from 'src/blog/entities/blog.entity';
         process.env.NODE_ENV !== 'production' &&
         process.env.NODE_ENV !== 'test',
       entities: [User, Blog, Media],
+      legacySpatialSupport: false,
     }),
     UsersModule,
     CommonModule,

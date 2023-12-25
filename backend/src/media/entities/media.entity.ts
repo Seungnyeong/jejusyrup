@@ -11,13 +11,16 @@ export enum MediaType {
 @Entity()
 export class Media extends CoreEntity {
   @Column({ type: 'enum', enum: MediaType })
-  mediatype: MediaType;
+  media_type: MediaType;
 
   @Column()
-  mediaName: string;
+  media_name: string;
 
   @Column()
-  mediaPath: string;
+  media_path: string;
+
+  @Column()
+  media_url: string;
 
   @ManyToOne((type) => User, (user) => user.medias)
   user: User;

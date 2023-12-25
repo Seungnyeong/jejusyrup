@@ -85,7 +85,6 @@ export class UsersService {
   }
 
   findById(id: number): Promise<User | undefined> {
-    console.log('asdf');
     return this.users.findOneOrFail({
       where: {
         id: id,

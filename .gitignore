@@ -29,7 +29,8 @@ backend/!.vscode/settings.json
 backend/!.vscode/tasks.json
 backend/!.vscode/launch.json
 backend/!.vscode/extensions.json
-
+backend/storage/images/*
+backend/storage/videos/*
 #envrionments
 .env.*
 docker
