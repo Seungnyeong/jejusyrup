@@ -18,8 +18,9 @@ export class LocalAuthGuard extends AuthGuard('local') {
         return false;
       }
       await super.logIn(request);
+      return true;
     }
 
-    return true;
+    return false;
   }
 }
