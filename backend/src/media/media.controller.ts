@@ -21,6 +21,10 @@ import {
 } from '@nestjs/platform-express';
 import { User } from 'src/decorators/user.decorator';
 import { BlogService } from 'src/blog/blog.service';
+import {
+  convertGPSToCoordinates,
+  getGPSData,
+} from 'src/common/util/photo.util';
 
 @Controller('media')
 export class MediaController {
@@ -53,6 +57,22 @@ export class MediaController {
       files: [...imageFiles, ...videoFiles].flat(),
       user,
     });
+  }
+
+  @Post('/test')
+  @UseInterceptors(FileInterceptor('file'))
+  async exif(@UploadedFile('file') file) {
+    try {
+      const gpsData = await getGPSData(file.path);
+      if (gpsData) {
+        const convertedCoordinates = convertGPSToCoordinates(gpsData);
+        console.log('Converted Coordinates:', convertedCoordinates);
+      }
+      return { status: 'ok', gpsData };
+    } catch (err) {
+      console.error('Error:', err);
+      return { status: 'error', error: err.message };
+    }
   }
 
   @Get()

@@ -1,5 +1,6 @@
 import { Blog } from 'src/blog/entities/blog.entity';
 import { CoreEntity } from 'src/common/entities/core.entity';
+import { Coordinates } from 'src/interface/country.interface';
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
@@ -27,4 +28,7 @@ export class Media extends CoreEntity {
 
   @ManyToOne((type) => Blog, (blog) => blog.id)
   blog: Blog;
+
+  @Column({ name: 'coordinates', type: 'json', nullable: true })
+  coordinates: Coordinates;
 }

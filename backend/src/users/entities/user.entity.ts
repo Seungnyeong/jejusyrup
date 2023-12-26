@@ -29,10 +29,10 @@ export class User extends CoreEntity {
   @Column({ name: 'country', type: 'json', nullable: true })
   country?: Country;
 
-  @OneToMany(() => Media, (media) => media.id)
+  @OneToMany(() => Media, (media) => media.id, { cascade: true })
   medias: Media[];
 
-  @OneToMany(() => Blog, (blog) => blog.id)
+  @OneToMany(() => Blog, (blog) => blog.id, { cascade: true })
   blogs: Blog[];
 
   @BeforeInsert()

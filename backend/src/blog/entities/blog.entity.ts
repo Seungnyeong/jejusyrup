@@ -12,7 +12,7 @@ export class Blog extends CoreEntity {
   @ManyToOne((type) => User, (user) => user.blogs)
   user: User;
 
-  @OneToMany((type) => Media, (media) => media.blog)
+  @OneToMany((type) => Media, (media) => media.blog, { cascade: true })
   medias: Media[];
 
   @Column({
