@@ -8,16 +8,31 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { Blog } from 'src/blog/entities/blog.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateMediaDto } from 'src/media/dto/create-media.dto';
+import { MediaService } from 'src/media/media.service';
+import { Media } from 'src/media/entities/media.entity';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class BlogService {
   constructor(
     @InjectRepository(Blog) private readonly blogs: Repository<Blog>,
+    private readonly mediaService: MediaService,
   ) {}
 
-  async create(createBlogDto: CreateBlogDto): Promise<Blog> {
+  @Transactional()
+  async create(
+    createBlogDto: CreateBlogDto,
+    files: Express.Multer.File[],
+  ): Promise<[Blog, Media[]]> {
     try {
-      return await this.blogs.save(this.blogs.create(createBlogDto));
+      const blog = await this.blogs.save(this.blogs.create(createBlogDto));
+      const media = await this.mediaService.create({
+        blog: blog,
+        user: createBlogDto.user,
+        files,
+      });
+      return Promise.all([blog, media]);
     } catch (e) {
       throw new InternalServerErrorException();
     }

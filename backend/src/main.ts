@@ -4,8 +4,10 @@ import helmet from 'helmet';
 import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
 import { setUpSession } from 'src/common/session/init.session';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 async function bootstrap() {
+  initializeTransactionalContext();
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });

@@ -12,17 +12,13 @@ import {
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { MediaService } from 'src/media/media.service';
-import { User } from 'src/users/entities/user.entity';
+import { User as UserInfo } from 'src/decorators/user.decorator';
 import { Response } from 'src/common/dtos/response.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
 @Controller('blog')
 export class BlogController {
-  constructor(
-    private readonly blogService: BlogService,
-    private readonly mediaService: MediaService,
-  ) {}
+  constructor(private readonly blogService: BlogService) {}
 
   @Post()
   @UseInterceptors(
@@ -33,21 +29,22 @@ export class BlogController {
   )
   async create(
     @Body() createBlogDto: CreateBlogDto,
+    @UserInfo() user,
     @UploadedFiles()
     files: {
       'image[]': Express.Multer.File[];
       'video[]': Express.Multer.File[];
     },
-    user: User,
   ): Promise<Response> {
     const imageFiles = Array.isArray(files['image[]']) ? files['image[]'] : [];
     const videoFiles = Array.isArray(files['video[]']) ? files['video[]'] : [];
-    const blog = await this.blogService.create(createBlogDto);
-    const media = await this.mediaService.create({
-      blog: blog,
-      files: [...imageFiles, ...videoFiles].flat(),
-      user: user,
-    });
+    const [blog, media] = await this.blogService.create(
+      {
+        title: createBlogDto.title,
+        user: user,
+      },
+      [...imageFiles, ...videoFiles].flat(),
+    );
 
     return {
       success: true,

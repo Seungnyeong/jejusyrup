@@ -21,6 +21,8 @@ import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { RedisModule } from './redis/redis.module';
 import { BlogModule } from './blog/blog.module';
 import { Blog } from 'src/blog/entities/blog.entity';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -47,19 +49,29 @@ import { Blog } from 'src/blog/entities/blog.entity';
         limit: 100,
       },
     ]),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      synchronize: process.env.NODE_ENV !== 'production',
-      logging:
-        process.env.NODE_ENV !== 'production' &&
-        process.env.NODE_ENV !== 'test',
-      entities: [User, Blog, Media],
-      legacySpatialSupport: false,
+    TypeOrmModule.forRootAsync({
+      useFactory() {
+        return {
+          type: 'mysql',
+          host: process.env.DB_HOST,
+          port: Number(process.env.DB_PORT),
+          username: process.env.DB_USERNAME,
+          password: process.env.DB_PASSWORD,
+          database: process.env.DB_NAME,
+          synchronize: process.env.NODE_ENV !== 'production',
+          logging:
+            process.env.NODE_ENV !== 'production' &&
+            process.env.NODE_ENV !== 'test',
+          entities: [User, Blog, Media],
+          legacySpatialSupport: false,
+        };
+      },
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('Invalid Options passed');
+        }
+        return addTransactionalDataSource(new DataSource(options));
+      },
     }),
     UsersModule,
     CommonModule,
