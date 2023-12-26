@@ -13,6 +13,7 @@ export class AuthMiddleware implements NestMiddleware {
     const sessionKey = await this.redisSerivce.getSessionKey(
       req.cookies.session_id,
     );
+
     if (sessionKey) {
       const {
         passport: { user },

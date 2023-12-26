@@ -10,4 +10,9 @@ export class RedisService {
   async getSessionKey(session_id: string): Promise<string | null> {
     return await this.redisRepository.get('sess', session_id);
   }
+
+  async deleteSessionKey(session_id: string): Promise<boolean> {
+    const session = await this.redisRepository.delete('sess', session_id);
+    return session === 0 ? false : true;
+  }
 }

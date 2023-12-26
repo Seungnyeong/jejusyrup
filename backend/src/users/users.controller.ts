@@ -15,10 +15,14 @@ import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { Response } from 'express';
 import { User } from 'src/decorators/user.decorator';
+import { RedisService } from 'src/redis/redis.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly redisService: RedisService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -44,5 +48,23 @@ export class UsersController {
         sameSite: 'lax',
       })
       .send({ status: 'ok' });
+  }
+
+  @Delete('/logout')
+  userLogout(@Req() request, @Res() response: Response) {
+    try {
+      if (!this.redisService.deleteSessionKey(request.cookies.session_id)) {
+        throw new Error();
+      }
+      response.setHeader(
+        'Set-Cookie',
+        `Authentication=; HttpOnly; Path=/; Max-Age=0`,
+      );
+      return response.status(200).send({
+        status: 'ok',
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

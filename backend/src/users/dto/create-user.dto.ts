@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsJSON, IsNotEmpty, IsString } from 'class-validator';
+import { Country } from 'src/interface/country.interface';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -13,4 +14,7 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsJSON()
+  country: Country;
 }

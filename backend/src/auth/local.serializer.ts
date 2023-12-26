@@ -18,7 +18,6 @@ export class LocalSerializer extends PassportSerializer {
   }
 
   async deserializeUser(payload: any, done: Function) {
-    console.log(payload);
     return await this.userRepository
       .findOneOrFail({
         where: {

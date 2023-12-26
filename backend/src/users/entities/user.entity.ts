@@ -5,6 +5,7 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Media } from 'src/media/entities/media.entity';
 import { Blog } from 'src/blog/entities/blog.entity';
+import { Country } from 'src/interface/country.interface';
 export enum UserRole {
   Admin = 'Admin',
   Photographer = 'Photographer',
@@ -24,6 +25,9 @@ export class User extends CoreEntity {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.Photographer })
   @IsEnum(UserRole)
   role: UserRole;
+
+  @Column({ name: 'country', type: 'json', nullable: true })
+  country?: Country;
 
   @OneToMany(() => Media, (media) => media.id)
   medias: Media[];
