@@ -11,6 +11,11 @@ export enum UserRole {
   Photographer = 'Photographer',
 }
 
+export enum UserProvider {
+  Kakao = 'Kakao',
+  Email = 'Email',
+}
+
 @Entity()
 export class User extends CoreEntity {
   @Column({ unique: true })
@@ -26,8 +31,9 @@ export class User extends CoreEntity {
   @IsEnum(UserRole)
   role: UserRole;
 
-  @Column({ default: 'email', nullable: false })
-  provider: string;
+  @Column({ default: UserProvider.Email, nullable: false })
+  @IsEnum(UserProvider)
+  provider: UserProvider;
 
   @Column({ name: 'country', type: 'json', nullable: true })
   country?: Country;

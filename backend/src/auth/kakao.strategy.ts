@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-kakao';
+import { UserProvider } from 'src/apis/users/entities/user.entity';
 import { UsersService } from 'src/apis/users/users.service';
 import { KakaoUserResponse } from 'src/lib/kakao/kakao.response';
 
@@ -31,16 +32,18 @@ export class KakaoStrategy extends PassportStrategy(Strategy) {
       };
       const isExist = await this.usersService.findOne(kakaoUser.email);
       if (!isExist) {
-        const newUser = await this.usersService.create({
-          email: kakaoUser.email,
-          nick_name: kakaoUser.nickname,
-          country: {
-            code: 'kr',
-            name: 'korea',
+        const newUser = await this.usersService.create(
+          {
+            email: kakaoUser.email,
+            nick_name: kakaoUser.nickname,
+            country: {
+              code: 'kr',
+              name: 'KOR',
+            },
+            password: null,
           },
-          provider: 'kakao',
-          password: null,
-        });
+          UserProvider.Kakao,
+        );
         done(null, newUser.data);
       }
       done(null, isExist);

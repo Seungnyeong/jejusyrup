@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from 'src/apis/users/entities/user.entity';
+import { User, UserProvider } from 'src/apis/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Response } from 'src/common/dtos/response.dto';
@@ -17,7 +17,10 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
   ) {}
-  async create(createUserDto: CreateUserDto): Promise<Response> {
+  async create(
+    createUserDto: CreateUserDto,
+    provider: UserProvider,
+  ): Promise<Response> {
     try {
       const exist = await this.users.findOne({
         where: { email: createUserDto.email },
@@ -25,7 +28,12 @@ export class UsersService {
       if (exist) {
         throw new UserAlreadyExistException();
       }
-      await this.users.save(this.users.create(createUserDto));
+      await this.users.save(
+        this.users.create({
+          ...createUserDto,
+          provider: provider,
+        }),
+      );
       return {
         success: true,
         message: '회원 가입을 축하합니다!',

@@ -14,12 +14,10 @@ export class LocalSerializer extends PassportSerializer {
   }
 
   serializeUser(user: any, done: Function) {
-    console.log('serializer', user);
     done(null, user);
   }
 
   async deserializeUser(payload: any, done: Function) {
-    console.log('deserilizer', payload);
     return await this.userRepository
       .findOneOrFail({
         where: {

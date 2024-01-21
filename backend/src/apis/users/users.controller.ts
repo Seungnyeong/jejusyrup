@@ -17,6 +17,7 @@ import { Response } from 'express';
 import { User } from 'src/decorators/user.decorator';
 import { RedisService } from 'src/redis/redis.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserProvider } from 'src/apis/users/entities/user.entity';
 
 @ApiTags('사용자')
 @Controller('users')
@@ -30,7 +31,7 @@ export class UsersController {
   @ApiOperation({ summary: '사용자 생성' })
   @ApiResponse({ status: 200 })
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.usersService.create(createUserDto, UserProvider.Email);
   }
 
   @Get('/profile')
@@ -57,7 +58,6 @@ export class UsersController {
   @Delete('/logout')
   userLogout(@Req() request, @Res() response: Response) {
     try {
-      console.log('logout');
       if (!this.redisService.deleteSessionKey(request.cookies.session_id)) {
         throw new Error();
       }

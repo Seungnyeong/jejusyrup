@@ -1,4 +1,5 @@
-import { IsEmail, IsJSON, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsJSON, IsNotEmpty, IsString } from 'class-validator';
+import { UserProvider } from 'src/apis/users/entities/user.entity';
 import { Country } from 'src/interface/country.interface';
 
 export class CreateUserDto {
@@ -16,8 +17,4 @@ export class CreateUserDto {
 
   @IsJSON()
   country: Country;
-
-  @IsString()
-  @IsNotEmpty()
-  provider: string;
 }

@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard, PassportModule } from '@nestjs/passport';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { LocalSerializer } from 'src/auth/local.serializer';
 import { LocalStrategy } from 'src/auth/local.strategy';
 import { RolesGuard } from 'src/auth/role.guard';
