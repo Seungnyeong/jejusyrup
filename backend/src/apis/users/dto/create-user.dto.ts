@@ -12,9 +12,12 @@ export class CreateUserDto {
   nick_name: string;
 
   @IsString()
-  @IsNotEmpty()
   password: string;
 
   @IsJSON()
   country: Country;
+
+  @IsString()
+  @IsNotEmpty()
+  provider: string;
 }

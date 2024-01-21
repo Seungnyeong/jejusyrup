@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/apis/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Response } from 'src/common/dtos/response.dto';
@@ -10,7 +10,7 @@ import {
   UserAlreadyExistException,
   UserNotExistException,
 } from 'src/common/exceptions/common.exception';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { LoginUserDto } from 'src/apis/users/dto/login-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -72,16 +72,12 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  async findOne(email: string): Promise<Response> {
-    const user = this.users.findOneOrFail({
+  async findOne(email: string): Promise<User> {
+    return await this.users.findOne({
       where: {
         email: email,
       },
     });
-    return {
-      success: true,
-      data: user,
-    };
   }
 
   findById(id: number): Promise<User | undefined> {

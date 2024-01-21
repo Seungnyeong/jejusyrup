@@ -5,12 +5,12 @@ import {
 } from '@nestjs/common';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { Blog } from 'src/blog/entities/blog.entity';
+import { Blog } from 'src/apis/blog/entities/blog.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateMediaDto } from 'src/media/dto/create-media.dto';
-import { MediaService } from 'src/media/media.service';
-import { Media } from 'src/media/entities/media.entity';
+import { CreateMediaDto } from 'src/apis/media/dto/create-media.dto';
+import { MediaService } from 'src/apis/media/media.service';
+import { Media } from 'src/apis/media/entities/media.entity';
 import { Transactional } from 'typeorm-transactional';
 
 @Injectable()

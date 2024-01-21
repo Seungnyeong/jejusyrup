@@ -3,8 +3,8 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Media } from 'src/media/entities/media.entity';
-import { Blog } from 'src/blog/entities/blog.entity';
+import { Media } from 'src/apis/media/entities/media.entity';
+import { Blog } from 'src/apis/blog/entities/blog.entity';
 import { Country } from 'src/interface/country.interface';
 export enum UserRole {
   Admin = 'Admin',
@@ -16,7 +16,7 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
+  @Column({ select: false, nullable: true })
   password: string;
 
   @Column({ unique: true })
@@ -25,6 +25,9 @@ export class User extends CoreEntity {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.Photographer })
   @IsEnum(UserRole)
   role: UserRole;
+
+  @Column({ default: 'email', nullable: false })
+  provider: string;
 
   @Column({ name: 'country', type: 'json', nullable: true })
   country?: Country;

@@ -1,7 +1,7 @@
-import { Blog } from 'src/blog/entities/blog.entity';
+import { Blog } from 'src/apis/blog/entities/blog.entity';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Coordinates } from 'src/interface/country.interface';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/apis/users/entities/user.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 export enum MediaType {

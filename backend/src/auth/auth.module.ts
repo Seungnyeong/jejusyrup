@@ -6,8 +6,9 @@ import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { LocalSerializer } from 'src/auth/local.serializer';
 import { LocalStrategy } from 'src/auth/local.strategy';
 import { RolesGuard } from 'src/auth/role.guard';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from 'src/apis/users/entities/user.entity';
+import { UsersService } from 'src/apis/users/users.service';
+import { KakaoStrategy } from 'src/auth/kakao.strategy';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersService } from 'src/users/users.service';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    KakaoStrategy,
   ],
 })
 export class AuthModule {}

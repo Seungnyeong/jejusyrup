@@ -20,12 +20,14 @@ import {
   FileInterceptor,
 } from '@nestjs/platform-express';
 import { User } from 'src/decorators/user.decorator';
-import { BlogService } from 'src/blog/blog.service';
+import { BlogService } from 'src/apis/blog/blog.service';
 import {
   convertGPSToCoordinates,
   getGPSData,
 } from 'src/common/util/photo.util';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('미디어')
 @Controller('media')
 export class MediaController {
   constructor(

@@ -6,23 +6,24 @@ import {
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './apis/users/users.module';
 import { CommonModule } from './common/common.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
-import { User } from 'src/users/entities/user.entity';
-import { MediaModule } from './media/media.module';
-import { Media } from 'src/media/entities/media.entity';
+import { User } from 'src/apis/users/entities/user.entity';
+import { MediaModule } from './apis/media/media.module';
+import { Media } from 'src/apis/media/entities/media.entity';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { RedisModule } from './redis/redis.module';
-import { BlogModule } from './blog/blog.module';
-import { Blog } from 'src/blog/entities/blog.entity';
+import { BlogModule } from './apis/blog/blog.module';
+import { Blog } from 'src/apis/blog/entities/blog.entity';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { KakaoModule } from 'src/lib/kakao/kakao.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { DataSource } from 'typeorm';
     MediaModule,
     RedisModule,
     BlogModule,
+    KakaoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -97,6 +99,14 @@ export class AppModule implements NestModule {
         {
           path: '/users',
           method: RequestMethod.POST,
+        },
+        {
+          path: '/kakao/oauth',
+          method: RequestMethod.ALL,
+        },
+        {
+          path: '/kakao/login',
+          method: RequestMethod.ALL,
         },
       )
       .forRoutes({

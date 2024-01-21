@@ -15,7 +15,9 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { User as UserInfo } from 'src/decorators/user.decorator';
 import { Response } from 'src/common/dtos/response.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('게시판')
 @Controller('blog')
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}

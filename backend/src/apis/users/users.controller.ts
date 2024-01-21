@@ -11,12 +11,14 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { LoginUserDto } from 'src/apis/users/dto/login-user.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { Response } from 'express';
 import { User } from 'src/decorators/user.decorator';
 import { RedisService } from 'src/redis/redis.service';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('사용자')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -25,6 +27,8 @@ export class UsersController {
   ) {}
 
   @Post()
+  @ApiOperation({ summary: '사용자 생성' })
+  @ApiResponse({ status: 200 })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -53,6 +57,7 @@ export class UsersController {
   @Delete('/logout')
   userLogout(@Req() request, @Res() response: Response) {
     try {
+      console.log('logout');
       if (!this.redisService.deleteSessionKey(request.cookies.session_id)) {
         throw new Error();
       }

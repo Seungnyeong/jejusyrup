@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { MediaService } from './media.service';
 import { MediaController } from './media.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Media } from 'src/media/entities/media.entity';
+import { Media } from 'src/apis/media/entities/media.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { checkFileType } from 'src/common/validation/file.validator';
-import { BlogService } from 'src/blog/blog.service';
-import { Blog } from 'src/blog/entities/blog.entity';
+import { BlogService } from 'src/apis/blog/blog.service';
+import { Blog } from 'src/apis/blog/entities/blog.entity';
 
 @Module({
   imports: [
