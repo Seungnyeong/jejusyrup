@@ -24,6 +24,8 @@ import { Blog } from 'src/apis/blog/entities/blog.entity';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { KakaoModule } from 'src/lib/kakao/kakao.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -32,6 +34,10 @@ import { KakaoModule } from 'src/lib/kakao/kakao.module';
       envFilePath:
         process.env.NODE_ENV === 'development' ? '.env.dev' : '.env.test',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'static'),
+      serveRoot: '/static',
     }),
     ThrottlerModule.forRoot([
       {
